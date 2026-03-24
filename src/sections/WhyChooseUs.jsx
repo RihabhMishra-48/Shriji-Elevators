@@ -60,23 +60,8 @@ const WhyChooseUs = () => {
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="hidden lg:block"
-          >
-            <div className="relative glass p-12 rounded-[3rem] border-accent/20">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-3xl rounded-full" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/50 blur-3xl rounded-full" />
-              <img 
-                src="/assets/blueprint.png" 
-                alt="Lift Blueprint" 
-                className="relative z-10 rounded-2xl border-2 border-accent/30 shadow-2xl shadow-accent/10 hover:scale-105 transition-all duration-700"
-              />
-            </div>
-          </motion.div>
+          {/* Blueprint image removed to keep the right side clear for the 3D elevator */}
+          <div className="hidden lg:block pointer-events-none" />
         </div>
       </div>
     </section>

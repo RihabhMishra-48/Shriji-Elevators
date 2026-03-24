@@ -47,12 +47,12 @@ const Services = () => {
   return (
     <section id="services" className="py-24 px-6 md:px-12 relative">
       <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
+        <div className="text-center lg:text-left mb-16">
           <span className="text-accent font-bold tracking-widest uppercase mb-4 block">WHAT WE DO</span>
           <h2 className="text-4xl md:text-6xl font-black">PREMIUM SERVICES</h2>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:w-[45vw] gap-8">
           {services.map((s, i) => (
             <ServiceCard key={i} {...s} index={i} />
           ))}

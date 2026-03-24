@@ -43,26 +43,8 @@ const About = () => {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="relative group"
-        >
-          <div className="absolute -inset-4 bg-accent/20 rounded-3xl blur-2xl group-hover:bg-accent/30 transition-all duration-500" />
-          <div className="relative glass-dark p-8 rounded-3xl border border-accent/20 overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1519449556851-5720b33024e7?q=80&w=2071&auto=format&fit=crop" 
-              alt="Modern Elevator" 
-              className="w-full h-80 object-cover rounded-xl"
-            />
-            <div className="mt-8">
-              <h3 className="text-xl font-bold mb-2">State-of-the-art Technology</h3>
-              <p className="text-white/60">We utilize the latest in smart control systems and energy-efficient motors.</p>
-            </div>
-          </div>
-        </motion.div>
+        {/* Right column empty to make space for 3D elevator layout */}
+        <div className="hidden lg:block pointer-events-none" />
       </div>
     </section>
   )

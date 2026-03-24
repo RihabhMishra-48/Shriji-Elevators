@@ -112,7 +112,7 @@ function App() {
       <Navbar />
       
       {/* 3D Canvas Background (Sticky) */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
+      <div className="fixed top-0 right-0 w-full lg:w-[45vw] h-screen z-0 pointer-events-none">
         <Suspense fallback={null}>
           <ElevatorCanvas scrollY={scrollYProgress} />
         </Suspense>

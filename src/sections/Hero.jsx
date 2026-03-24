@@ -4,14 +4,16 @@ import { ArrowDown } from 'lucide-react'
 
 const Hero = () => {
   return (
-    <section id="home" className="relative h-screen flex flex-col items-center justify-center text-center px-6">
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
-        viewport={{ once: true }}
-      >
-        <h2 className="text-accent font-bold tracking-[0.2em] mb-4 uppercase text-sm md:text-base">
+    <section id="home" className="relative h-screen flex flex-col justify-center px-6 md:px-12">
+      <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+          viewport={{ once: true }}
+          className="text-center lg:text-left flex flex-col items-center lg:items-start"
+        >
+          <h2 className="text-accent font-bold tracking-[0.2em] mb-4 uppercase text-sm md:text-base">
           ELEVATING YOUR EXPERIENCE
         </h2>
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight tracking-tighter">
@@ -22,7 +24,7 @@ const Hero = () => {
           Modern, reliable, and premium vertical transportation solutions for 
           tomorrow's architecture. Safe. Smooth. Superior.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 w-full">
           <a
             href="#contact"
             className="w-full sm:w-auto bg-accent text-primary px-10 py-4 rounded-full font-bold text-lg hover:bg-accent-dark transition-all shadow-xl shadow-accent/20 animate-glow"
@@ -36,7 +38,8 @@ const Hero = () => {
             OUR LEGACY
           </a>
         </div>
-      </motion.div>
+        </motion.div>
+      </div>
 
       <motion.div
         initial={{ opacity: 0 }}

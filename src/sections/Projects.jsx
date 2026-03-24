@@ -28,18 +28,18 @@ const Projects = () => {
   return (
     <section id="projects" className="py-24 px-6 md:px-12 bg-transparent">
       <div className="max-w-7xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col justify-between items-start mb-16 gap-4">
           <div>
             <span className="text-accent font-bold tracking-widest uppercase mb-4 block">OUR PORTFOLIO</span>
             <h2 className="text-4xl md:text-6xl font-black">RECENT PROJECTS</h2>
           </div>
-          <p className="max-w-md text-white/50 text-lg">
+          <p className="max-w-md text-white/50 text-lg lg:w-[45vw]">
             We've completed hundreds of projects across the country, from high-rise 
             commercial towers to luxury private villas.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:w-[45vw] gap-8">
           {projects.map((p, i) => (
             <motion.div
               key={i}
