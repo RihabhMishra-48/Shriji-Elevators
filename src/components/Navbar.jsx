@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Phone } from 'lucide-react'
+import logoUrl from '../assets/logo.PNG'
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -40,8 +41,7 @@ const Navbar = () => {
           animate={{ opacity: 1, x: 0 }}
           className="text-2xl font-bold tracking-tighter cursor-pointer"
         >
-          <span className="text-white">SHRIJI</span>
-          <span className="text-accent ml-2">ELEVATORS</span>
+          <img src={logoUrl} alt="Shriji Elevators" className="h-12 w-auto object-contain" />
         </motion.div>
 
         {/* Desktop Links */}

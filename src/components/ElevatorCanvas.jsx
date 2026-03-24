@@ -6,21 +6,56 @@ import * as THREE from 'three'
 
 const ElevatorModel = ({ scrollY }) => {
   const meshRef = useRef()
+  const leftDoorRef = useRef()
+  const rightDoorRef = useRef()
+  const personRef = useRef()
   
   // scrollY is a MotionValue (0 to 1) representing the scroll progress of the entire page
   // We map this progress to a vertical position (Y axis) in 3D space.
-  // Floor positions: Home (top) is at y=5, Contact (bottom) is at y=-15.
-  const yPos = useTransform(scrollY, [0, 1], [5, -15])
+  // Floor positions: map progress to vertical position so it stays in camera view
+  // Camera Y is 0. If it ends at y=0 it stays centered when doors open.
+  const yPos = useTransform(scrollY, [0, 1], [3, 0])
   
   // useSpring provides a smooth 'inertia' effect, making the elevator feel heavy and premium
   const smoothY = useSpring(yPos, { stiffness: 50, damping: 20 })
 
+  // Door animation: start opening at 0.85, fully open at 0.95
+  const doorOpenProgress = useTransform(scrollY, [0.85, 0.95], [0, 1])
+  
+  // Person walking animation: start walking at 0.9, fully out at 1.0
+  const personWalkZ = useTransform(scrollY, [0.9, 1.0], [0, 4.5])
+  // Person fades out slightly at the very end
+  const personOpacity = useTransform(scrollY, [0.95, 1.0], [1, 0])
+
+  const bodyMatRef = useRef()
+  const headMatRef = useRef()
+
   useFrame((state) => {
+    // Safety check just in case scrollY is ever undefined
+    if (!scrollY) return;
+
     if (meshRef.current) {
-      // Update position on every frame for silky smooth movement
       meshRef.current.position.y = smoothY.get()
-      // Gentle rotation based on scroll for extra dynamic feel
       meshRef.current.rotation.y = scrollY.get() * Math.PI * 0.1
+    }
+
+    // Animate doors
+    if (leftDoorRef.current && rightDoorRef.current) {
+      const openAmount = doorOpenProgress.get() * 1.25
+      leftDoorRef.current.position.x = -0.625 - openAmount
+      rightDoorRef.current.position.x = 0.625 + openAmount
+    }
+
+    // Animate person
+    if (personRef.current) {
+      personRef.current.position.z = personWalkZ.get()
+      
+      const targetOpacity = personOpacity.get()
+      const isVisible = targetOpacity > 0.01
+      
+      personRef.current.visible = isVisible
+      if (bodyMatRef.current) bodyMatRef.current.opacity = targetOpacity
+      if (headMatRef.current) headMatRef.current.opacity = targetOpacity
     }
   })
 
@@ -38,9 +73,21 @@ const ElevatorModel = ({ scrollY }) => {
         />
       </mesh>
 
-      {/* Glass Panels */}
-      <mesh position={[0, 0, 1.51]}>
-        <planeGeometry args={[2.5, 3.5]} />
+      {/* Left Glass Panel Door */}
+      <mesh ref={leftDoorRef} position={[-0.625, 0, 1.51]}>
+        <planeGeometry args={[1.25, 3.5]} />
+        <meshStandardMaterial 
+          color="#D4AF37" 
+          metalness={1} 
+          roughness={0.1} 
+          transparent 
+          opacity={0.3} 
+        />
+      </mesh>
+
+      {/* Right Glass Panel Door */}
+      <mesh ref={rightDoorRef} position={[0.625, 0, 1.51]}>
+        <planeGeometry args={[1.25, 3.5]} />
         <meshStandardMaterial 
           color="#D4AF37" 
           metalness={1} 
@@ -69,6 +116,38 @@ const ElevatorModel = ({ scrollY }) => {
           emissiveIntensity={2} 
         />
       </mesh>
+
+      {/* 3D Person Silhouette */}
+      <group ref={personRef} position={[0, -0.6, 0]}>
+        {/* Body */}
+        <mesh position={[0, 0, 0]}>
+          <cylinderGeometry args={[0.3, 0.3, 1.5, 16]} />
+          <meshStandardMaterial 
+            ref={bodyMatRef}
+            color="#FFD700" 
+            metalness={0.8} 
+            roughness={0.2} 
+            emissive="#FFD700"
+            emissiveIntensity={0.3}
+            transparent
+            opacity={1}
+          />
+        </mesh>
+        {/* Head */}
+        <mesh position={[0, 1.05, 0]}>
+          <sphereGeometry args={[0.25, 16, 16]} />
+          <meshStandardMaterial 
+            ref={headMatRef}
+            color="#FFD700" 
+            metalness={0.8} 
+            roughness={0.2} 
+            emissive="#FFD700"
+            emissiveIntensity={0.3}
+            transparent
+            opacity={1}
+          />
+        </mesh>
+      </group>
     </group>
   )
 }
@@ -93,14 +172,7 @@ const ElevatorCanvas = ({ scrollY }) => {
           <ElevatorModel scrollY={scrollY} />
         </PresentationControls>
 
-        <ContactShadows 
-          position={[0, -20, 0]} 
-          opacity={0.4} 
-          scale={20} 
-          blur={2} 
-          far={4.5} 
-        />
-        <Environment preset="city" />
+        {/* Removed ContactShadows and Environment preset="city" to prevent WebGL Context Lost from blocked CDNs and performance crashes */}
       </Canvas>
     </div>
   )
