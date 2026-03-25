@@ -47,7 +47,8 @@ const AIVisualizer = ({ isOpen, onClose }) => {
   const [stream, setStream] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [recommendation, setRecommendation] = useState(null);
-  const [error, setError] = useState(null);
+  const [detailedError, setDetailedError] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const videoRef = useRef(null);
 
   useEffect(() => {
@@ -88,15 +89,23 @@ const AIVisualizer = ({ isOpen, onClose }) => {
     setIsScanning(true);
     setRecommendation(null);
     setError(null);
+    setDetailedError(null);
+    setPreviewImage(null);
 
     try {
+      if (!videoRef.current || videoRef.current.videoWidth === 0) {
+        throw new Error("Camera not ready. Please wait a moment.");
+      }
+
       // Capture Frame
       const canvas = document.createElement('canvas');
       canvas.width = videoRef.current.videoWidth;
       canvas.height = videoRef.current.videoHeight;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(videoRef.current, 0, 0);
-      const base64Image = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+      setPreviewImage(dataUrl);
+      const base64Image = dataUrl.split(',')[1];
 
       // Gemini Vision API Call
       const genAI = new GoogleGenerativeAI(API_KEY);
@@ -126,7 +135,7 @@ const AIVisualizer = ({ isOpen, onClose }) => {
       // Robust extraction of JSON
       const jsonMatch = rawText.match(/\{[\s\S]*\}/);
       if (!jsonMatch) {
-        throw new Error("No JSON found in response");
+        throw new Error("AI returned invalid data format. Check console for raw response.");
       }
       
       const data = JSON.parse(jsonMatch[0]);
@@ -134,6 +143,7 @@ const AIVisualizer = ({ isOpen, onClose }) => {
     } catch (err) {
       console.error("Gemini Scan Error:", err);
       setError("AI_SCAN_FAILED");
+      setDetailedError(err.message);
     } finally {
       setIsScanning(false);
     }
@@ -211,6 +221,17 @@ const AIVisualizer = ({ isOpen, onClose }) => {
                  error === "AI_SCAN_FAILED" ? "AI failed to analyze the space. Try again with better lighting." : 
                  "Could not access camera feed."}
               </p>
+              {detailedError && (
+                <p className="text-red-400 text-xs font-mono mb-6 break-words uppercase">
+                  ERROR: {detailedError}
+                </p>
+              )}
+              {previewImage && (
+                <div className="mb-6 rounded-xl overflow-hidden border border-white/10">
+                  <p className="text-[10px] text-white/40 mb-1">LAST CAPTURED FRAME:</p>
+                  <img src={previewImage} alt="Captured" className="w-full h-32 object-cover opacity-50 grayscale" />
+                </div>
+              )}
               <button onClick={() => window.location.reload()} className="text-accent underline font-bold">RELOAD APP</button>
             </motion.div>
           ) : isScanning ? (
