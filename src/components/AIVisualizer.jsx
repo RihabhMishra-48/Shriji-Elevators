@@ -110,7 +110,9 @@ const AIVisualizer = ({ isOpen, onClose }) => {
 
       // Gemini Vision API Call
       const genAI = new GoogleGenerativeAI(API_KEY);
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+      const model = genAI.getGenerativeModel({ 
+        model: "gemini-1.5-flash-latest" 
+      }, { apiVersion: "v1" });
       
       const prompt = `Analyze this room/space for elevator installation. 
       Determine if it is 'residential', 'commercial', or 'hospital'.
@@ -294,7 +296,7 @@ const AIVisualizer = ({ isOpen, onClose }) => {
       <div className="absolute inset-0 pointer-events-none">
         <div className="w-full h-full border-[30px] border-white/5 opacity-10" />
         <div className="absolute bottom-10 left-10 font-mono text-[10px] text-accent/40 space-y-1 bg-black/20 p-2 rounded">
-          <p>ENGINE: GEMINI-1.5-FLASH</p>
+          <p>ENGINE: GEMINI-1.5-FLASH-LATEST</p>
           <p>OBJECT_DETECTION: ON</p>
           <p>COORD: {Math.random().toFixed(4)}, {Math.random().toFixed(4)}</p>
         </div>
