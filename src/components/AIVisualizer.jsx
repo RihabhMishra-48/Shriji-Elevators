@@ -102,16 +102,17 @@ const AIVisualizer = ({ isOpen, onClose }) => {
       const genAI = new GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
       
-      const prompt = `Analyze this room/space where an elevator might be installed. 
-      Help the user visualize the best Shriji Elevator type.
-      Classify the space into exactly one of these: 'residential', 'commercial', or 'hospital'.
-      Provide a specific title and a brief professional reasoning (1-2 sentences).
-      Return ONLY valid JSON format:
+      const prompt = `Analyze this room/space for elevator installation. 
+      Determine if it is 'residential', 'commercial', or 'hospital'.
+      Provide a specific product title and a professional 2-sentence description of why this lift fits.
+      
+      IMPORTANT: Return ONLY a raw JSON object with this structure:
       {
         "type": "residential" | "commercial" | "hospital",
-        "title": "...",
-        "desc": "..."
-      }`;
+        "title": "Product Name Here",
+        "desc": "Analysis description here"
+      }
+      Do not include any other text, markdown blocks, or explanations outside the JSON.`;
 
       const result = await model.generateContent([
         prompt,
@@ -119,9 +120,16 @@ const AIVisualizer = ({ isOpen, onClose }) => {
       ]);
       
       const response = await result.response;
-      const text = response.text().replace(/```json|```/g, "").trim();
-      const data = JSON.parse(text);
+      const rawText = response.text();
+      console.log("Gemini Raw Response:", rawText);
+
+      // Robust extraction of JSON
+      const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error("No JSON found in response");
+      }
       
+      const data = JSON.parse(jsonMatch[0]);
       setRecommendation(data);
     } catch (err) {
       console.error("Gemini Scan Error:", err);
@@ -160,7 +168,7 @@ const AIVisualizer = ({ isOpen, onClose }) => {
           ref={videoRef} 
           autoPlay 
           playsInline 
-          className="w-full h-full object-cover opacity-60"
+          className="w-full h-full object-cover"
         />
         {!stream && !error && (
            <div className="text-accent/50 font-mono text-center animate-pulse">
