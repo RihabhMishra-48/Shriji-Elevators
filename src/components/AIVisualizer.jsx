@@ -47,6 +47,7 @@ const AIVisualizer = ({ isOpen, onClose }) => {
   const [stream, setStream] = useState(null);
   const [isScanning, setIsScanning] = useState(false);
   const [recommendation, setRecommendation] = useState(null);
+  const [error, setError] = useState(null);
   const [detailedError, setDetailedError] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const videoRef = useRef(null);
