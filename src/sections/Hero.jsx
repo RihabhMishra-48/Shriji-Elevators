@@ -24,19 +24,20 @@ const Hero = () => {
           Modern, reliable, and premium vertical transportation solutions for 
           tomorrow's architecture. Safe. Smooth. Superior.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 w-full">
+        <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 md:gap-6 w-full">
           <a
             href="#contact"
             className="w-full sm:w-auto bg-accent text-primary px-10 py-4 rounded-full font-bold text-lg hover:bg-accent-dark transition-all shadow-xl shadow-accent/20 animate-glow"
           >
             GET A QUOTE
           </a>
-          <a
-            href="#about"
-            className="w-full sm:w-auto glass px-10 py-4 rounded-full font-bold text-lg hover:bg-white/10 transition-all"
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('open-ai-visualizer'))}
+            className="w-full sm:w-auto glass-dark px-10 py-4 rounded-full font-bold text-lg hover:bg-accent hover:text-primary transition-all flex items-center justify-center gap-2 border border-accent/20 group"
           >
-            OUR LEGACY
-          </a>
+            <div className="w-2 h-2 bg-accent rounded-full animate-pulse group-hover:bg-primary" />
+            VISUALISE WITH AI
+          </button>
         </div>
         </motion.div>
       </div>

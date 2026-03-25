@@ -12,6 +12,7 @@ import ElevatorCanvas from './components/ElevatorCanvas'
 import WhatsAppButton from './components/WhatsAppButton'
 import AdminDashboard from './components/AdminDashboard'
 import AdminLogin from './components/AdminLogin'
+import AIVisualizer from './components/AIVisualizer'
 
 function App() {
   const checkIsAdmin = () => window.location.hash === '#admin' || window.location.pathname === '/admin'
@@ -25,11 +26,18 @@ function App() {
     }
     window.addEventListener('hashchange', handleNavigation)
     window.addEventListener('popstate', handleNavigation)
+    
+    const handleOpenAI = () => setIsAIVisualizerOpen(true)
+    window.addEventListener('open-ai-visualizer', handleOpenAI)
+
     return () => {
       window.removeEventListener('hashchange', handleNavigation)
       window.removeEventListener('popstate', handleNavigation)
+      window.removeEventListener('open-ai-visualizer', handleOpenAI)
     }
   }, [])
+
+  const [isAIVisualizerOpen, setIsAIVisualizerOpen] = useState(false)
 
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -129,6 +137,7 @@ function App() {
 
       <Footer />
       <WhatsAppButton />
+      <AIVisualizer isOpen={isAIVisualizerOpen} onClose={() => setIsAIVisualizerOpen(false)} />
     </div>
   )
 }
